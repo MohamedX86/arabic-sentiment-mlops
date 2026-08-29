@@ -1,0 +1,41 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# ML / Data artifacts
+models/
+data/processed/
+data/scoring/output/
+
+# MLflow local artifacts
+mlruns/
+
+# DVC cache
+.dvc/cache/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
