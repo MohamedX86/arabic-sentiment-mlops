@@ -1,0 +1,30 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python scripts/prepare_data.py
+    deps:
+    - path: data/raw/PROD.csv
+      hash: md5
+      md5: 1c14f0d604b98afcd8c11ecbdbe76900
+      size: 527639
+    - path: scripts/prepare_data.py
+      hash: md5
+      md5: 30618d3ffaafbddbdfa30c25f67dd290
+      size: 2231
+    - path: src/arabic_sentiment/preprocessing.py
+      hash: md5
+      md5: 8a9cd4e3b07614822fd0e57ebab1fdc2
+      size: 1154
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 9c84a8532b948e3c8cbb5f623d9ffb1b
+      size: 52850
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 84c71c07c1710cd466378819e68436e2
+      size: 448353
+    - path: data/processed/validation.csv
+      hash: md5
+      md5: 2c535a40f4f0d98c0d3501ba889e2923
+      size: 55507

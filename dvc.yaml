@@ -1,0 +1,11 @@
+stages:
+  prepare:
+    cmd: python scripts/prepare_data.py
+    deps:
+      - data/raw/PROD.csv
+      - scripts/prepare_data.py
+      - src/arabic_sentiment/preprocessing.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/validation.csv
+      - data/processed/test.csv
