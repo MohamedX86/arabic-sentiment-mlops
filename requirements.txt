@@ -6,3 +6,6 @@ pandas==2.3.3
 scikit-learn==1.7.2
 matplotlib==3.10.9
 dvc==3.67.1
+datasets==5.0.1
+evaluate==0.4.6
+accelerate==1.14.0

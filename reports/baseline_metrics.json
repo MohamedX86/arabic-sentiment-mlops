@@ -1,0 +1,10 @@
+{
+  "model_name": "aubmindlab/bert-base-arabertv02",
+  "epochs": 2,
+  "batch_size": 8,
+  "learning_rate": 2e-05,
+  "max_length": 128,
+  "validation_accuracy": 0.8524590163934426,
+  "validation_f1_macro": 0.5864273676722175,
+  "device": "cuda"
+}
