@@ -40,3 +40,4 @@ mlruns/
 .coverage
 htmlcov/
 *.egg-info/
+mlflow.db
