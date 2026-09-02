@@ -2,19 +2,22 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-import mlflow.transformers
 import torch
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from arabic_sentiment.preprocessing import preprocess_text
 
 
-REGISTERED_MODEL_URI = "models:/arabic-sentiment-arabert/1"
+MODEL_PATH = "deployment/model"
 
 MODEL = None
 TOKENIZER = None
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+DEVICE = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
 
 
 class PredictionRequest(BaseModel):
@@ -34,15 +37,15 @@ class PredictionResponse(BaseModel):
 async def lifespan(app: FastAPI):
     global MODEL, TOKENIZER
 
-    print("Loading registered MLflow model...")
+    print("Loading local sentiment model...")
 
-    components = mlflow.transformers.load_model(
-        REGISTERED_MODEL_URI,
-        return_type="components",
+    MODEL = AutoModelForSequenceClassification.from_pretrained(
+        MODEL_PATH
     )
 
-    MODEL = components["model"]
-    TOKENIZER = components["tokenizer"]
+    TOKENIZER = AutoTokenizer.from_pretrained(
+        MODEL_PATH
+    )
 
     MODEL.to(DEVICE)
     MODEL.eval()
