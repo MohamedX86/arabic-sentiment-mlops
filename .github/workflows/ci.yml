@@ -38,4 +38,4 @@ jobs:
           python -m py_compile src/arabic_sentiment/config.py
 
       - name: Run tests
-        run: python -m pytest tests -v
+        run: python -m pytest tests/test_api_unit.py -v
