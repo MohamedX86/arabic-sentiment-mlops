@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict
 
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -33,7 +32,7 @@ class ArabicSentimentModel:
     def predict(self, text: str) -> PredictionResult:
         processed_text = preprocess_text(text)
 
-        inputs: Dict[str, torch.Tensor] = self.tokenizer(
+        inputs: dict[str, torch.Tensor] = self.tokenizer(
             processed_text,
             return_tensors="pt",
             truncation=True,

@@ -4,7 +4,7 @@ import pytest
 import torch
 from fastapi.testclient import TestClient
 
-import arabic_sentiment.api as api
+from arabic_sentiment import api
 
 
 class FakeTokenizer:
