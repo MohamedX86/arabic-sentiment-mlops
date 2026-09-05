@@ -19,7 +19,7 @@ jobs:
 
     env:
       PYTHONPATH: ${{ github.workspace }}/src
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/arabic-sentiment-mlops
+      IMAGE_NAME: ghcr.io/mohamedx86/arabic-sentiment-mlops
 
     steps:
       - name: Checkout repository
