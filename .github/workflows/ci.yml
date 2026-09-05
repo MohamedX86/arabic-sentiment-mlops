@@ -36,10 +36,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Install CI tools
-        run: |
-          pip install ruff
-          pip install dvc[http]
+      - name: Install Ruff
+        run: pip install ruff
 
       - name: Lint
         run: ruff check src tests
@@ -53,15 +51,6 @@ jobs:
       - name: Run tests
         run: python -m pytest tests/test_api_unit.py -v
 
-      - name: Configure DVC credentials
-        run: |
-          dvc remote modify --local dagshub auth basic
-          dvc remote modify --local dagshub user MohamedX86
-          dvc remote modify --local dagshub password "${{ secrets.DAGSHUB_TOKEN }}"
-
-      - name: Pull deployment model
-        run: dvc pull deployment/model.dvc
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -73,7 +62,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
+      - name: Build and publish Docker image
         uses: docker/build-push-action@v6
         with:
           context: .

@@ -8,7 +8,6 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 COPY src ./src
-COPY deployment/model ./deployment/model
 
 ENV PYTHONPATH=/app/src
 

@@ -1,0 +1,8 @@
+services:
+  api:
+    build: .
+    image: arabic-sentiment-mlops:local
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./deployment/model:/app/deployment/model:ro
