@@ -9,7 +9,6 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from arabic_sentiment.preprocessing import preprocess_text
 
-
 MODEL_PATH = "deployment/model"
 
 MODEL = None

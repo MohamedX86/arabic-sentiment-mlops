@@ -1,6 +1,5 @@
 import re
 
-
 _ARABIC_DIACRITICS = re.compile(
     r"""
     ّ    | # Shadda
