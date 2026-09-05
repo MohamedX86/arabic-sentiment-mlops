@@ -59,8 +59,11 @@ jobs:
           dvc remote modify --local dagshub user MohamedX86
           dvc remote modify --local dagshub password "${{ secrets.DAGSHUB_TOKEN }}"
 
-      - name: Pull DVC artifacts
-        run: dvc pull
+      - name: Fetch DVC artifacts
+        run: dvc fetch
+
+      - name: Checkout DVC artifacts
+        run: dvc checkout
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
