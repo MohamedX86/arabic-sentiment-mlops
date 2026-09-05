@@ -1,0 +1,6 @@
+[core]
+    remote = dagshub
+['remote "gdrive"']
+    url = gdrive://1YbeXmi7U3cS0FjyVCtxBdA8_tKMUc4Nf
+['remote "dagshub"']
+    url = https://dagshub.com/MohamedX86/arabic-sentiment-mlops.dvc
