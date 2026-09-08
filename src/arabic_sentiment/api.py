@@ -10,6 +10,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from arabic_sentiment.preprocessing import preprocess_text
 
 MODEL_PATH = "deployment/model"
+MODEL_VERSION = "1"
 
 MODEL = None
 TOKENIZER = None
@@ -30,6 +31,7 @@ class PredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     label: str
     confidence: float
+    model_version: str
 
 
 @asynccontextmanager
@@ -83,6 +85,7 @@ def health() -> dict[str, str]:
     return {
         "status": "healthy",
         "device": str(DEVICE),
+        "model_version": MODEL_VERSION,
     }
 
 
@@ -139,6 +142,7 @@ def predict(
             confidence=float(
                 confidence.item()
             ),
+            model_version=MODEL_VERSION,
         )
 
     except Exception as exc:

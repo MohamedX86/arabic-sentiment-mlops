@@ -13,8 +13,8 @@ stages:
       size: 2231
     - path: src/arabic_sentiment/preprocessing.py
       hash: md5
-      md5: 8a9cd4e3b07614822fd0e57ebab1fdc2
-      size: 1154
+      md5: 1ef938e05027a2ba6288592975a46b1d
+      size: 1152
     outs:
     - path: data/processed/test.csv
       hash: md5
