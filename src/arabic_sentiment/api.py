@@ -14,7 +14,6 @@ from transformers import (
 
 from arabic_sentiment.preprocessing import preprocess_text
 
-
 MODEL_PATH = "deployment/model"
 MODEL_VERSION = "1"
 
