@@ -1,13 +1,19 @@
 from __future__ import annotations
 
+import logging
+import time
 from contextlib import asynccontextmanager
 
 import torch
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+)
 
 from arabic_sentiment.preprocessing import preprocess_text
+
 
 MODEL_PATH = "deployment/model"
 MODEL_VERSION = "1"
@@ -19,6 +25,22 @@ DEVICE = torch.device(
     "cuda" if torch.cuda.is_available() else "cpu"
 )
 
+
+# ---------------------------------------------------------
+# Logging / Monitoring
+# ---------------------------------------------------------
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
+
+logger = logging.getLogger("arabic-sentiment-api")
+
+
+# ---------------------------------------------------------
+# Request / Response Models
+# ---------------------------------------------------------
 
 class PredictionRequest(BaseModel):
     text: str = Field(
@@ -34,11 +56,15 @@ class PredictionResponse(BaseModel):
     model_version: str
 
 
+# ---------------------------------------------------------
+# Model Lifecycle
+# ---------------------------------------------------------
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global MODEL, TOKENIZER
 
-    print("Loading local sentiment model...")
+    logger.info("Loading local sentiment model...")
 
     MODEL = AutoModelForSequenceClassification.from_pretrained(
         MODEL_PATH
@@ -51,13 +77,23 @@ async def lifespan(app: FastAPI):
     MODEL.to(DEVICE)
     MODEL.eval()
 
-    print(f"Model loaded on device: {DEVICE}")
+    logger.info(
+        "Model loaded successfully | device=%s | model_version=%s",
+        DEVICE,
+        MODEL_VERSION,
+    )
 
     yield
 
     MODEL = None
     TOKENIZER = None
 
+    logger.info("Model resources released.")
+
+
+# ---------------------------------------------------------
+# FastAPI Application
+# ---------------------------------------------------------
 
 app = FastAPI(
     title="Arabic Sentiment API",
@@ -67,12 +103,60 @@ app = FastAPI(
 )
 
 
+# ---------------------------------------------------------
+# Request Monitoring Middleware
+# ---------------------------------------------------------
+
+@app.middleware("http")
+async def monitoring_middleware(
+    request: Request,
+    call_next,
+):
+    start_time = time.perf_counter()
+    status_code = 500
+
+    try:
+        response = await call_next(request)
+        status_code = response.status_code
+        return response
+
+    except Exception:
+        logger.exception(
+            "request_failed | method=%s | path=%s",
+            request.method,
+            request.url.path,
+        )
+        raise
+
+    finally:
+        latency_ms = (
+            time.perf_counter() - start_time
+        ) * 1000
+
+        logger.info(
+            "request | method=%s | path=%s | "
+            "status=%s | latency_ms=%.2f",
+            request.method,
+            request.url.path,
+            status_code,
+            latency_ms,
+        )
+
+
+# ---------------------------------------------------------
+# Root Endpoint
+# ---------------------------------------------------------
+
 @app.get("/")
 def root() -> dict[str, str]:
     return {
         "message": "Arabic Sentiment API is running."
     }
 
+
+# ---------------------------------------------------------
+# Health Endpoint
+# ---------------------------------------------------------
 
 @app.get("/health")
 def health() -> dict[str, str]:
@@ -89,6 +173,10 @@ def health() -> dict[str, str]:
     }
 
 
+# ---------------------------------------------------------
+# Prediction Endpoint
+# ---------------------------------------------------------
+
 @app.post(
     "/predict",
     response_model=PredictionResponse,
@@ -96,6 +184,7 @@ def health() -> dict[str, str]:
 def predict(
     request: PredictionRequest,
 ) -> PredictionResponse:
+
     if MODEL is None or TOKENIZER is None:
         raise HTTPException(
             status_code=503,
@@ -137,7 +226,7 @@ def predict(
             int(predicted_index.item())
         ]
 
-        return PredictionResponse(
+        result = PredictionResponse(
             label=label,
             confidence=float(
                 confidence.item()
@@ -145,7 +234,21 @@ def predict(
             model_version=MODEL_VERSION,
         )
 
+        logger.info(
+            "prediction | label=%s | confidence=%.4f | "
+            "model_version=%s",
+            result.label,
+            result.confidence,
+            result.model_version,
+        )
+
+        return result
+
     except Exception as exc:
+        logger.exception(
+            "prediction_failed"
+        )
+
         raise HTTPException(
             status_code=500,
             detail=str(exc),
