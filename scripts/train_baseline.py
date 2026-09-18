@@ -12,7 +12,6 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from arabic_sentiment.config import MODEL_NAME, RANDOM_SEED
 
-
 TRAIN_PATH = Path("data/processed/train.csv")
 VALIDATION_PATH = Path("data/processed/validation.csv")
 

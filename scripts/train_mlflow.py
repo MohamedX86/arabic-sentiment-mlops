@@ -16,7 +16,6 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from arabic_sentiment.config import MODEL_NAME, RANDOM_SEED
 
-
 TRAIN_PATH = "data/processed/train.csv"
 VALIDATION_PATH = "data/processed/validation.csv"
 
@@ -398,8 +397,7 @@ def main() -> None:
                 f"{metrics['f1_macro']:.4f}"
             )
 
-            if metrics["f1_macro"] > best_f1:
-                best_f1 = metrics["f1_macro"]
+            best_f1 = max(best_f1, metrics["f1_macro"])
 
         final_metrics = evaluate_model(
             model,

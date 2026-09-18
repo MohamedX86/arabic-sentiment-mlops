@@ -14,7 +14,6 @@ from sklearn.metrics import (
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-
 TEST_PATH = Path("data/processed/test.csv")
 MODEL_DIR = Path("models/baseline_arabert")
 

@@ -5,27 +5,22 @@ import time
 from contextlib import asynccontextmanager
 
 import torch
-
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import Response
-
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    Counter,
+    Gauge,
+    Histogram,
+    generate_latest,
+)
 from pydantic import BaseModel, Field
-
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
 )
 
-from prometheus_client import (
-    Counter,
-    Histogram,
-    generate_latest,
-    CONTENT_TYPE_LATEST,
-    Gauge,
-)
-
 from arabic_sentiment.preprocessing import preprocess_text
-
 
 # =========================================================
 # Model Configuration

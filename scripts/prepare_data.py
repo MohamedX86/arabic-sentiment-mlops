@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 
 from arabic_sentiment.preprocessing import preprocess_text
 
-
 RAW_DATA_PATH = Path("data/raw/PROD.csv")
 PROCESSED_DIR = Path("data/processed")
 

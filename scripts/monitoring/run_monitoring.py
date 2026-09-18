@@ -1,12 +1,10 @@
-from pathlib import Path
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
 from evidently import Report
 from evidently.presets import DataDriftPreset
-
 
 # ============================================================
 # PATHS
@@ -434,12 +432,8 @@ def main():
     # ========================================================
 
     metrics = {
-        "reference_rows": int(
-            len(reference)
-        ),
-        "production_rows": int(
-            len(production)
-        ),
+        "reference_rows": len(reference),
+        "production_rows": len(production),
         "reference_target": (
             reference_target
         ),
