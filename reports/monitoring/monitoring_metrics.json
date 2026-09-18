@@ -1,0 +1,10 @@
+{
+  "reference_rows": 3417,
+  "production_rows": 4272,
+  "reference_target": "label",
+  "production_target": "polarity",
+  "text_length_psi": 0.000592,
+  "sentiment_psi": 26.140802,
+  "psi_threshold": 0.25,
+  "drift_detected": true
+}
