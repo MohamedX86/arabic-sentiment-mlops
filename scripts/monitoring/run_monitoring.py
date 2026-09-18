@@ -524,38 +524,37 @@ def main():
         f"\n{evidently_path}"
     )
 
-    # ========================================================
+        # ========================================================
     # Human-readable status
     # ========================================================
 
-    status = (
-        "DRIFT DETECTED"
-        if drift_detected
-        else
-        "NO SIGNIFICANT DRIFT"
-    )
-
-    text_length_status = (
-        "DRIFT"
-        if text_length_psi > PSI_THRESHOLD
-        else
-        "OK"
-    )
-
-    sentiment_status = (
-        "DRIFT"
-        if sentiment_psi > PSI_THRESHOLD
-        else
-        "OK"
-    )
-
     print("\nMonitoring Summary:")
 
-    print("\nGenerated files:")
-    print(f"- {metrics_path}")
-    print(f"- {evidently_path}")
+    print(
+        f"Drift detected: {drift_detected}"
+    )
 
-    print("\nMonitoring completed successfully.")
+    print(
+        f"Text length PSI: {text_length_psi:.6f}"
+    )
+
+    print(
+        f"Sentiment PSI: {sentiment_psi:.6f}"
+    )
+
+    print("\nGenerated files:")
+
+    print(
+        f"- {metrics_path}"
+    )
+
+    print(
+        f"- {evidently_path}"
+    )
+
+    print(
+        "\nMonitoring completed successfully."
+    )
 
 
 if __name__ == "__main__":
